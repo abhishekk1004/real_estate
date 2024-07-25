@@ -1,0 +1,15 @@
+<!-- agent_form.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Agent</title>
+</head>
+<body>
+    <h1>Add Agent</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

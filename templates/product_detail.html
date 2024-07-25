@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<html>
+<head>
+    <title>{{ product.title }}</title>
+    <!-- Include Bootstrap CSS from CDN -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+    
+</head>
+<body>
+    <!-- Your content here -->
+    <div class="container">
+        <h1>{{ product.title }}</h1>
+        <p>{{ product.description }}</p>
+        <p>City: {{ product.city }}</p>
+        <p>Price: ${{ product.price }}</p>
+        <p class="text-danger">Price: ${{ product.price }}</p>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid">
+        {% endif %}
+        <p>Address: {{ product.address }}</p>
+        <p>Bedrooms: {{ product.num_bedrooms }}</p>
+        <p>Number of Floors: {{ product.num_floors }}</p>
+        <p>Square Feet: {{ product.square_feet }}</p>
+        <p>Zip Code: {{ product.zip_code }}</p>
+        <p>Contact Number: {{ product.contact_number }}</p>
+
+    </div>
+    <div class="about-content">
+        <a href="{% url 'enquiry' %}" class="btn" > Make an Enquiry </a>
+    </div>
+    
+</body>
+</html>
+{% endblock %}

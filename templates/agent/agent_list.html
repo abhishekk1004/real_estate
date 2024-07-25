@@ -1,0 +1,16 @@
+<!-- agent_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agent List</title>
+</head>
+<body>
+    <h1>Agent List</h1>
+    <ul>
+        {% for agent in agents %}
+            <li><a href="{% url 'agent_detail' pk=agent.pk %}">{{ agent.name }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'agent_create' %}">Add Agent</a>
+</body>
+</html>

@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="./static/css/style.css">
+
+  <!-- 
+    - google font link
+  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+
+    <section class="cta">
+        <div class="container">
+
+          <div class="cta-card">
+            <div class="card-content">
+              <h2 class="h2 card-title">Looking for a dream home?</h2>
+
+              <p class="card-text">We can help you realize your dream of a new home</p>
+            </div>
+
+            <button class="btn cta-btn">
+              <span>Explore Properties</span>
+
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+
+
+
+
+  <!-- 
+    - #FOOTER
+  -->
+
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="container">
+
+        <div class="footer-brand">
+
+          <a href="#" class="logo">
+            <img src={% static "images/logo-light.png"%} alt="Homeverse logo">
+          </a>
+
+          <p class="section-text">
+            Lorem Ipsum is simply dummy text of the and typesetting industry. Lorem Ipsum is dummy text of the printing.
+          </p>
+
+          <ul class="contact-list">
+
+            <li>
+              <a href="#" class="contact-link">
+                <ion-icon name="location-outline"></ion-icon>
+
+                <address>Brooklyn, New York, United States</address>
+              </a>
+            </li>
+
+            <li>
+              <a href="tel:+9779849852109" class="contact-link">
+                <ion-icon name="call-outline"></ion-icon>
+
+                <span>+9779849852109</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="mailto:contact@homemandu.com" class="contact-link">
+                <ion-icon name="mail-outline"></ion-icon>
+
+                <span>contact@homemandu.com</span>
+              </a>
+            </li>
+
+          </ul>
+
+          <ul class="social-list">
+
+            <li>
+              <a href="#" class="social-link">
+                <ion-icon name="logo-facebook"></ion-icon>
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="social-link">
+                <ion-icon name="logo-twitter"></ion-icon>
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="social-link">
+                <ion-icon name="logo-linkedin"></ion-icon>
+              </a>
+            </li>
+
+            <li>
+              <a href="#" class="social-link">
+                <ion-icon name="logo-youtube"></ion-icon>
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+
+        <div class="footer-link-box">
+
+          <ul class="footer-list">
+
+            <li>
+              <p class="footer-list-title">Company</p>
+            </li>
+
+            <li>
+              <a href="{% url 'about' %}" class="footer-link">About</a>
+            </li>
+
+            <li>
+              <a href="{% url 'blog' %}" class="footer-link">Blog</a>
+            </li>
+
+            <li>
+              <a href="{% url 'property_list' %}" class="footer-link">All Products</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Locations Map</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">FAQ</a>
+            </li>
+
+            <li>
+              <a href="{% url 'contact' %}" class="footer-link">Contact us</a>
+            </li>
+
+          </ul>
+
+          <ul class="footer-list">
+
+            <li>
+              <p class="footer-list-title">Services</p>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Order tracking</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Wish List</a>
+            </li>
+
+            <li>
+              <a href="{% url 'login' %}" class="footer-link">Login</a>
+            </li>
+
+            <li>
+              <a href="{% url 'home' %}" class="footer-link">My account</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Terms & Conditions</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Promotional Offers</a>
+            </li>
+
+          </ul>
+
+          <ul class="footer-list">
+
+            <li>
+              <p class="footer-list-title">Customer Care</p>
+            </li>
+
+            <li>
+              <a href="{% url 'login' %}" class="footer-link">Login</a>
+            </li>
+
+            <li>
+              <a href="{% url 'home' %}" class="footer-link">My account</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Wish List</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">Order tracking</a>
+            </li>
+
+            <li>
+              <a href="#" class="footer-link">FAQ</a>
+            </li>
+
+            <li>
+              <a href="{% url 'contact' %}" class="footer-link">Contact us</a>
+            </li>
+
+          </ul>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+
+        <p class="copyright">
+          &copy; 2022 <a href="#">codewithsadee</a>. All Rights Reserved
+        </p>
+
+      </div>
+    </div>
+
+  </footer>
+
+{% endblock %}
