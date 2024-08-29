@@ -1,0 +1,13 @@
+<!-- templates/upload_file.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="d-flex justify-content-center">Upload New Property</h1>
+    <div class="container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+{% endblock %}

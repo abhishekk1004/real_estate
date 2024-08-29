@@ -1,46 +1,50 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-
-<html>
-<head>
-    <title>{{ product.title }}</title>
-    <!-- Include Bootstrap CSS from CDN -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
-    
-</head>
-<body>
-    <!-- Your content here -->
-    <div class="container">
-        <h1>{{ product.title }}</h1>
-        <p>{{ product.description }}</p>
-        <p>City: {{ product.city }}</p>
-        <p>Price: ${{ product.price }}</p>
-        <p class="text-danger">Price: ${{ product.price }}</p>
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid">
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <img src="{% if property.photo %}{{ property.photo.url }}{% else %}{% static 'default-image.jpg' %}{% endif %}" class="img-fluid" alt="{{ property.title }}">
+    </div>
+    <div class="col-md-4">
+      <h2>Details</h2>
+      <p><strong>City:</strong> {{ property.city }}</p>
+      <p><strong>Price:</strong> ${{ property.price }}</p>
+      <p><strong>Address:</strong> {{ property.address }}</p>
+      <p><strong>Bedrooms:</strong> {{ property.num_bedrooms }}</p>
+      <p><strong>Number of Floors:</strong> {{ property.num_floors }}</p>
+      <p><strong>Square Feet:</strong> {{ property.square_feet }}</p>
+      <p><strong>Category:</strong> {{ property.category }}</p>
+      <p><strong>Description:</strong> {{ property.description }}</p>
+      
+      {% if user.role == 'client' %}
+        <a href="{% url 'make_enquiry' property.id %}" class="btn btn-primary">Make an Inquiry</a>
+        
+        {% if is_favorite %}
+            <form action="{% url 'toggle_favorite' property.id %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Remove from Favorites</button>
+            </form>
+          {% else %}
+            <form action="{% url 'toggle_favorite' property.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary">Add to Favorites</button>
+            </form>
         {% endif %}
-        <p>Address: {{ product.address }}</p>
-        <p>Bedrooms: {{ product.num_bedrooms }}</p>
-        <p>Number of Floors: {{ product.num_floors }}</p>
-        <p>Square Feet: {{ product.square_feet }}</p>
-        <p>Zip Code: {{ product.zip_code }}</p>
-        <p>Contact Number: {{ product.contact_number }}</p>
+    {% endif %}
+    </div>
+  </div>
 
+  {% if user.role == 'agent' %}
+    <div class="mt-4">
+      <h3>Inquiries</h3>
+      <ul>
+        {% for inquiry in inquiries %}
+          <li>{{ inquiry.message }} - {{ inquiry.client.username }}</li>
+        {% endfor %}
+      </ul>
     </div>
-    <div class="about-content">
-        <a href="{% url 'enquiry' %}" class="btn" > Make an Enquiry </a>
-    </div>
-    
-</body>
-</html>
+  {% endif %}
+</div>
 {% endblock %}

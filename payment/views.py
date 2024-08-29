@@ -1,33 +1,54 @@
-from django.shortcuts import render, redirect
-from .models import Payment, Invoice, Property, Client
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Payment, Invoice, Receipt
 from .forms import PaymentForm, InvoiceForm
+import uuid
+from products.models import Property
 
-# Create your views here.
+def is_client(user):
+    return user.is_authenticated and user.role == 'client'
 
-def make_payment(request, pk):
-    property = Property.objects.get(pk=pk)
-    client = Client.objects.get(user=request.user)
+@login_required
+@user_passes_test(is_client)
+def create_invoice(request, property_id):
+    property = get_object_or_404(Property, id=property_id)
     if request.method == 'POST':
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.client = client
-            payment.property = property
-            payment.save()
-            return redirect('property_detail', pk=pk)
-    else:
-        form = PaymentForm()
-    return render(request, 'payments/payment_form.html', {'form': form})
-
-def generate_invoice(request, payment_id):
-    payment = Payment.objects.get(pk=payment_id)
-    if request.method == 'POST':
-        form = InvoiceForm(request.POST, request.FILES)
+        form = InvoiceForm(request.POST)
         if form.is_valid():
             invoice = form.save(commit=False)
-            invoice.payment = payment
+            invoice.property = property
+            invoice.client = request.user
+            invoice.total_amount = property.price + invoice.service_charge
             invoice.save()
-            return redirect('payment_detail', payment_id=payment_id)
+            return redirect('invoice_detail', invoice_id=invoice.id)
     else:
         form = InvoiceForm()
-    return render(request, 'payments/invoice_form.html', {'form': form})
+    return render(request, 'payment/create_invoice.html', {'form': form, 'property': property})
+
+@login_required
+@user_passes_test(is_client)
+def invoice_detail(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    return render(request, 'payment/invoice_detail.html', {'invoice': invoice})
+
+@login_required
+@user_passes_test(is_client)
+def issue_receipt(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    receipt = Receipt.objects.create(
+        invoice=invoice,
+        receipt_number=str(uuid.uuid4()).replace('-', '')[:12]
+    )
+    return render(request, 'payment/receipt_detail.html', {'receipt': receipt})
+
+@login_required
+@user_passes_test(is_client)
+def invoice_list(request):
+    invoices = Invoice.objects.filter(client=request.user)
+    return render(request, 'payment/invoice_list.html', {'invoices': invoices})
+
+@login_required
+@user_passes_test(is_client)
+def print_invoice(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id)
+    return render(request, 'payment/print_invoice.html', {'invoice': invoice})

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="d-flex justify-content-center">File Uploaded Successfully</h1>
+    <div class="container">
+        <p>Your file has been uploaded successfully.</p>
+        <p>File URL: <a href="{{ file_url }}" target="_blank">{{ file_url }}</a></p>
+        <a href="{% url 'property_list' %}" class="btn btn-primary">Back to Property List</a>
+    </div>
+{% endblock %}

@@ -35,11 +35,12 @@ def user_login(request):
     return render(request, 'registration/login.html', {'form': form})
 
 def user_logout(request):
+    print("Logout view called")
     logout(request)
     return redirect('login')
 
 
-def is_agent(user):
-    return user.is_authenticated and user.role == 'agent'
+# def is_agent(user):
+#     return user.is_authenticated and user.role == 'agent'
 
 

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Invoice Details</h2>
+    <p><strong>Property:</strong> {{ invoice.property.title }}</p>
+    <p><strong>Client:</strong> {{ invoice.client.username }}</p>
+    <p><strong>Service Charge:</strong> {{ invoice.service_charge }}</p>
+    <p><strong>Total Amount:</strong> {{ invoice.total_amount }}</p>
+    <a href="{% url 'print_invoice' invoice.id %}" class="btn btn-primary">Print Invoice</a>
+</div>
+{% endblock %}

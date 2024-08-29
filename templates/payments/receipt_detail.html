@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Receipt Details</h2>
+  <p><strong>Receipt Number:</strong> {{ receipt.receipt_number }}</p>
+  <p><strong>Invoice Number:</strong> {{ receipt.invoice.invoice_number }}</p>
+  <p><strong>Client:</strong> {{ receipt.invoice.payment.client.username }}</p>
+  <p><strong>Property:</strong> {{ receipt.invoice.payment.property.title }}</p>
+  <p><strong>Amount:</strong> ${{ receipt.invoice.payment.amount }}</p>
+  <p><strong>Service Charge:</strong> ${{ receipt.invoice.payment.service_charge }}</p>
+  <p><strong>Total:</strong> ${{ receipt.invoice.payment.amount|add:receipt.invoice.payment.service_charge }}</p>
+  <p><strong>Issued At:</strong> {{ receipt.issued_at }}</p>
+  <button onclick="window.print()" class="btn btn-secondary">Print Receipt</button>
+{% endblock %}

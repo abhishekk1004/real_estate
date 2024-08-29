@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Invoice</h2>
+    <p><strong>Property:</strong> {{ invoice.property.title }}</p>
+    <p><strong>Client:</strong> {{ invoice.client.username }}</p>
+    <p><strong>Service Charge:</strong> {{ invoice.service_charge }}</p>
+    <p><strong>Total Amount:</strong> {{ invoice.total_amount }}</p>
+</div>
+<script>
+    window.print();
+</script>
+{% endblock %}

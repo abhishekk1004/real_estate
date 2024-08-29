@@ -1,55 +1,43 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
 
+<!-- Bootstrap CSS and JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- Search Form -->
+<form method="get" action="{% url 'home' %}">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" name="search" placeholder="Search..." aria-label="Search">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </div>
+</form>
 
+<!-- Client List for Agents -->
+{% if user.role == 'agent' %}
+  <div class="mt-4">
+    <h2>Clients</h2>
+    <ul>
+      {% for client in clients %}
+        <li><a href="{% url 'client_interactions' client.id %}">{{ client.user.username }}</a></li>
+      {% empty %}
+        <li>No clients found</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
 
-<div class="container" style="position: relative;">
-  <!-- Search bar -->
-  <form method="get" action="{% url 'home' %}">
-    <div class="input-group mb-3" style="position: absolute; top: 100px; left: 10px; z-index: 1;">
-      <input type="text" class="form-control" name="search" placeholder="Search..." aria-label="Search" aria-describedby="basic-addon2">
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" style="background-color:#D8BFD8" type="submit">Search</button>
-      </div>
-    </div>
-  </form>  
-</div>
-
+<!-- Carousel -->
 <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="{% static 'images/slide1.jpg' %}" class="d-block w-100" alt="Slide 1">
-    </div>
-    <div class="carousel-item">
       <img src="{% static 'images/slide2.jpg' %}" class="d-block w-100" alt="Slide 2">
-    </div>
-    <div class="carousel-item">
       <img src="{% static 'images/slide3.jpg' %}" class="d-block w-100" alt="Slide 3">
     </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/property-1.jpg' %}" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/property-2.jpg' %}" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/property-3.jpg' %}" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/property-4.png' %}" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/about-banner-1.png' %}" class="d-block w-100" alt="Slide 3">
-    </div>
-    <div class="carousel-item">
-      <img src="{% static 'images/about-banner-2.jpg' %}" class="d-block w-100" alt="Slide 3">
-    </div>
+    <!-- More carousel items -->
   </div>
   <a class="carousel-control-prev" href="#imageCarousel" role="button" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -63,9 +51,8 @@
 
 <script>
   var myCarousel = new bootstrap.Carousel(document.getElementById('imageCarousel'), {
-    interval: 3000, // Set the slide interval in milliseconds (e.g., 3 seconds)
+    interval: 3000
   });
 </script>
-
 
 {% endblock %}

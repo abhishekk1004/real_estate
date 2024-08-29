@@ -1,86 +1,73 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1 class="d-flex justify-content-center">Homes for Sale:</h1>
-    <div class="d-flex justify-content-center">
-        <form method="get">
-            <div class="input-group">
-                <input type="text" name="zip_code" class="form-control" placeholder="Zip Code">
-                <input type="text" name="city" class="form-control" placeholder="City">
-                <input type="text" name="address" class="form-control" placeholder="Address">
-                <!-- <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </div> -->
-            </div>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label for="price-min" class="form-label">Min Price</label>
-                    <input type="number" name="min_price" class="form-control" id="price-min" min="0" max="1000000000" value="{{ request.GET.min_price }}">
-                </div>
-                <div class="col-md-6">
-                    <label for="price-max" class="form-label">Max Price</label>
-                    <input type="number" name="max_price" class="form-control" id="price-max" min="0" max="1000000000" value="{{ request.GET.max_price }}">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Apply Search Filter</button>
-                </div>  
-            </div>          
-        </form>
-    </div>
+    <!-- Search Feature -->
+    <form method="get" action="{% url 'property_list' %}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search by title, city, price, location, description">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
 
-    <ul class="list-group container">
-        {% if form.is_bound and form.is_valid %}
-            <h2>Search Results:</h2>
-            {% for product in products %}
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-md-6">
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" alt="{{ product.title }}" class="img-fluid" style="width: 100%; height: auto;">
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6">
-                            <h3><a href="{% url 'product_detail' product.id %}">{{ product.title }}</a></h3>
-                            <p>City: {{ product.city }}</p>
-                            <p>Price: ${{ product.price }}</p>
-                            <p>Address: {{ product.address }}</p>
-                            <p>Bedrooms: {{ product.num_bedrooms }}</p>
-                            <p>Number of Floors: {{ product.num_floors }}</p>
-                            <p>Square Feet: {{ product.square_feet }}</p>
-                            <p>Zip Code: {{ product.zip_code }}</p>
-                            <!-- Add more details like bedrooms, square feet, etc. -->
-                        </div>
-                    </div>
-                </li>
-            {% endfor %}
-            {% if products.count == 0 %}
-                <p>No results found.</p>
-            {% endif %}
-        {% else %}
-            <h2>Featured Property:</h2>
-            {% for product in page %}
-                <li class="list-group-item">
-                    <a href="{% url 'product_detail' product.id %}">{{ product.title }}</a>
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}" width="300" height="200">
-                    {% endif %}
-                    
-                    <!-- Display the number of bedrooms and icon -->
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-bed"></i> <!-- Bootstrap icon for bed -->
-                        {{ product.num_bedrooms }} Bedrooms
-                    </div>
-                </li>
-            {% endfor %}
+        {% if user.is_authenticated and user.role == 'client' %}
+            <a href="{% url 'favorite_properties' %}" class="btn btn-warning favorite-btn">My Favorite Properties</a>
         {% endif %}
-    </ul>  
-          <!-- Other navigation links -->
+
+    </form>
+
+    <!-- Property List -->
+    <h1 class="d-flex justify-content-center">Here You Go:</h1>
+    <ul class="list-group container mb-4">
+        {% for property in properties %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if property.photo %}
+                            <img src="{{ property.photo.url }}" alt="{{ property.title }}" class="img-fluid" style="width: 100%; height: auto;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h3><a href="{% url 'property_detail' property.id %}">{{ property.title }}</a></h3>
+                        <p>City: {{ property.city }}</p>
+                        <p>Price: ${{ property.price }}</p>
+                        <p>Address: {{ property.address }}</p>
+                        <p>Bedrooms: {{ property.num_bedrooms }}</p>
+                        <p>Number of Floors: {{ property.num_floors }}</p>
+                        <p>Square Feet: {{ property.square_feet }}</p>
+                        {% if property.get_category_display %}
+                            <p>Category: {{ property.get_category_display }}</p>
+                        {% endif %}
+                        {% if user.is_authenticated and user.role == 'client' %}
+                            <form method="post" action="{% url 'property_detail' property.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Make an Enquiry</button>
+                            </form>
+                            {% comment %} <form method="post" action="{% url 'toggle_favorite' property.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary">
+                                    {% if property in favorite_properties %}
+                                        Remove from Favorites
+                                    {% else %}
+                                        Add to Favorites
+                                    {% endif %}
+                                </button>
+                            </form> {% endcomment %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add Property Form -->
     {% if user.is_authenticated and user.role == 'agent' %}
-        <a href="{% url 'property_add' %}" class="btn btn-primary">Add Property</a>
+        <h1 class="d-flex justify-content-center">Upload New Property</h1>
+        <div class="container mb-4">
+            <form method="post" enctype="multipart/form-data" action="{% url 'add_property' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
     {% endif %}
-       
-      
-    {% comment %} <a href="{% url 'property_add' %}" class="btn"> Add Property</a> {% endcomment %}
 {% endblock %}
-
-

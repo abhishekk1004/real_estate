@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Client Details</h1>
+        <p><strong>ID:</strong> {{ client.id }}</p>
+        <p><strong>Name:</strong> {{ client.name }}</p>
+        <p><strong>Email:</strong> {{ client.email }}</p>
+        <p><strong>Phone:</strong> {{ client.phone }}</p>
+
+        <h3>Interactions</h3>
+        <ul>
+            {% for interaction in interactions %}
+                <li>
+                    <strong>Date:</strong> {{ interaction.date }} |
+                    <strong>Note:</strong> {{ interaction.note }}
+                </li>
+            {% empty %}
+                <li>No interactions found.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Add Interaction</h3>
+        <form method="post" action="{% url 'client_details' client.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Interaction</button>
+        </form>
+    </div>
+{% endblock %}

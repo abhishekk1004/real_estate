@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Interactions with {{ client.user.username }}</h2>
+  <ul>
+    {% for interaction in interactions %}
+      <li>{{ interaction.date }}: {{ interaction.interaction_type }} - {{ interaction.notes }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
